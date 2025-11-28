@@ -1,6 +1,7 @@
 import unittest
-from functions.get_files_info import get_files_info
 from functions.get_file_content import get_file_content
+from functions.get_files_info import get_files_info
+from functions.write_file import write_file
 
 class TestFunctions(unittest.TestCase):
     # def test_current_directory(self):
@@ -15,20 +16,29 @@ class TestFunctions(unittest.TestCase):
     # def test_relative_parent_filepath(self):
     #     print(f'Results for \'../\' directory:\n {get_files_info("calculator", "../")}\n')
 
-    def test_main(self):
-        print(f'{get_file_content("calculator", "main.py")}')
+    # def test_main(self):
+    #     print(f'{get_file_content("calculator", "main.py")}')
 
-    def test_calculator(self):
-         print(f'{get_file_content("calculator", "pkg/calculator.py")}')
+    # def test_calculator(self):
+    #      print(f'{get_file_content("calculator", "pkg/calculator.py")}')
 
-    def test_bin_cat(self):
-        print(f'{get_file_content("calculator", "/bin/cat")}')
+    # def test_bin_cat(self):
+    #     print(f'{get_file_content("calculator", "/bin/cat")}')
 
-    def test_pkg_fake_file(self):
-        print(f'{get_file_content("calculator", "pkg/does_not_exist.py")}')
+    # def test_pkg_fake_file(self):
+    #     print(f'{get_file_content("calculator", "pkg/does_not_exist.py")}')
    
     # def test_lorem(self):
         # print(f'{get_file_content("calculator", "lorem.txt")}')
+
+    def test_write_file_lorem(self):
+        print(write_file("calculator", "lorem.txt", "wait, this isn't lorem ipsum"))
+
+    def test_write_file_morelorem(self):
+        print(write_file("calculator", "pkg/morelorem.txt", "lorem ipsum dolor sit amet"))
+    
+    def test_write_file_tmp(self):
+        print(write_file("calculator", "/tmp/temp.txt", "this should not be allowed"))
 
 if __name__ == "__main__":
     unittest.main()
