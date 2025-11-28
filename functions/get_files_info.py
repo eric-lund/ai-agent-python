@@ -12,7 +12,7 @@ def get_files_info(working_directory, directory="."):
         # print(f'commonpath: {os.path.commonpath([abs_working_dir, abs_target_dir]) == abs_working_dir}')
 
         # check if it is a valid directory
-        if os.path.isdir(abs_target_dir) == False:
+        if not os.path.isdir(abs_target_dir):
             return f'Error: "{directory}" is not a directory'
 
         # check if outside working directory
