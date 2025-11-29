@@ -1,5 +1,6 @@
 import os
 import subprocess
+from google.genai import types
 
 def run_python_file(working_directory, file_path, args=[]):
 # Not intended for use in production environment
@@ -60,3 +61,25 @@ def run_python_file(working_directory, file_path, args=[]):
 
     except Exception as e:
         return f"Error: executing Python file: {e}"
+    
+schema_run_python_file = types.FunctionDeclaration(
+    name="run_python_file",
+    description="Run a Python program within a working directory. It returns a single string with stdout and stderr values when successful and return codes when not successful.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        required=['file_path'],
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The name of the file that will be run from in the working directory.",
+            ),
+            "args": types.Schema(
+                type=types.Type.ARRAY,
+                items=types.Schema(
+                    type=types.Type.STRING,
+                ),
+                description="A list of optional arguments that can be passed to Python",
+            ),
+        },
+    ),
+)
