@@ -7,6 +7,7 @@ from functions.get_files_info import schema_get_files_info
 from functions.run_python_file import schema_run_python_file
 from functions.write_file import schema_write_file
 from functions.get_file_content import schema_get_file_content
+from functions.call_function import call_function
 
 
 def main():
@@ -44,8 +45,9 @@ All paths you provide should be relative to the working directory. You do not ne
         command_prompt = sys.argv[2]
     else:
         command_prompt = ''
-    
-    welcome_message = "Hello from ai-agent-python!"
+
+    print(f'user prompt: {user_prompt}')
+    print(f'command prompt: {command_prompt}')
 
     messages = [
         types.Content(role="user", parts=[types.Part(text=user_prompt)]),
@@ -59,8 +61,6 @@ All paths you provide should be relative to the working directory. You do not ne
 
     client = genai.Client(api_key=api_key)
     model_name = 'gemini-2.0-flash-001'
-
-    response = client.models.generate_content
 
     response = client.models.generate_content(
         model=model_name,
@@ -78,12 +78,30 @@ All paths you provide should be relative to the working directory. You do not ne
     print(f'Prompt tokens: {response.usage_metadata.prompt_token_count}')
     print(f'Response tokens: {response.usage_metadata.candidates_token_count}')
 
+    if command_prompt == '--verbose':
+        verbose = True
+
     if response.function_calls:
         for function_call in response.function_calls:
-            print(f"Calling function: {function_call.name }({function_call.args})")
+            function_call_result = call_function(function_call, verbose)
     else:
         print(response.text)
-        
+           
+    if not function_call_result.parts:
+        raise Exception("Missing function call parts.")
+    
+    if not isinstance(function_call_result.parts[0].function_response, types.FunctionResponse):
+        raise Exception("Missing FunctionReponse object.")
+    
+    if not function_call_result.parts[0].function_response.response:
+        raise Exception("Missing response")
+    
+    function_results = []
+    function_results += function_call_result.parts[0]
+
+    if command_prompt:
+        print(f"-> {function_call_result.parts[0].function_response.response}")
+
     sys.exit(0)
 
 if __name__ == "__main__":

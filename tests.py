@@ -75,12 +75,19 @@ class TestFunctions(unittest.TestCase):
     #     )
     #     call_function(fake_call)
 
-    def test_get_file_content_verbose(self):
+    # def test_get_file_content_verbose(self):
+    #     fake_call = types.FunctionCall(
+    #     name="get_file_content",
+    #     args={"file_path": "pkg/calculator.py"}
+    #     )
+    #     call_function(fake_call, verbose=True)
+
+    def test_wrong_function_name(self):
         fake_call = types.FunctionCall(
-        name="get_file_content",
+        name="get_file_content_",
         args={"file_path": "pkg/calculator.py"}
         )
-        call_function(fake_call, verbose=True)
+        call_function(fake_call, verbose=False)
 
 
 if __name__ == "__main__":
