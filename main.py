@@ -60,6 +60,8 @@ All paths you provide should be relative to the working directory. You do not ne
     client = genai.Client(api_key=api_key)
     model_name = 'gemini-2.0-flash-001'
 
+    response = client.models.generate_content
+
     response = client.models.generate_content(
         model=model_name,
         contents=messages,
@@ -68,6 +70,13 @@ All paths you provide should be relative to the working directory. You do not ne
             system_instruction=system_prompt
         )
     )
+
+    # Make sure we get a valid response
+    if response.usage_metadata is None:
+        return print(f'The Gemini API call failed.')
+    
+    print(f'Prompt tokens: {response.usage_metadata.prompt_token_count}')
+    print(f'Response tokens: {response.usage_metadata.candidates_token_count}')
 
     if response.function_calls:
         for function_call in response.function_calls:
